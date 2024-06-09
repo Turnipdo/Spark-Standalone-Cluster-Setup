@@ -1,0 +1,23 @@
+Microsoft Windows [Version 10.0.22631.3672]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\ku_ch>java -version
+java version "22.0.1" 2024-04-16
+Java(TM) SE Runtime Environment (build 22.0.1+8-16)
+Java HotSpot(TM) 64-Bit Server VM (build 22.0.1+8-16, mixed mode, sharing)
+
+C:\Users\ku_ch>javac -version
+javac 22.0.1
+
+C:\Users\ku_ch>echo %SPARK_HOME%
+C:\spark\spark-3.5.1-bin-hadoop3
+
+C:\Users\ku_ch>echo %JAVA_HOME%
+C:\Program Files\Java\jdk-22
+
+C:\Users\ku_ch>echo %HADOOP_HOME%
+C:\hadoop
+
+
+
+
