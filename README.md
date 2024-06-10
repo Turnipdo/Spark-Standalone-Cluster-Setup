@@ -52,38 +52,176 @@ To facilitate the initial setup of Apache Spark, this repository provides a begi
     * Allow the connection and click `Next`
     * Select when this rule applies (I selected all three `Domain`, `Private`, `Public`)
     * Name the rule as Spark Web UI and hit finish.<br><br>
-  * Once everything is installed like `python`, `pip`, `pyspark` and everything is configured you can now test the following commands in a terminal window (I've included the .txt files and the outputs from my terminal window):
-    * `java -version`
-    * `javac -version`
-    * `echo %SPARK_HOME%`
-    * `echo %JAVA_HOME%`
-    * `echo %HADOOP_HOME%`<br><br>
-  * You can then use the following command `pyspark` in your terminal window to start a spark session, navigate to http://localhost:4040 to check the Spark Web UI.
- 
+  * Once everything is installed like `python`, `pip`, `pyspark` and everything is configured you can now test the following commands in a terminal window (I've included the .txt files and the outputs from my terminal window):<br>
+ ```bash
+$ java -version
+java version "22.0.1" 2024-04-16
+Java(TM) SE Runtime Environment (build 22.0.1+8-16)
+Java HotSpot(TM) 64-Bit Server VM (build 22.0.1+8-16, mixed mode, sharing)
+
+$ javac -version
+javac 22.0.1
+
+$ echo %SPARK_HOME%
+C:\spark\spark-3.5.1-bin-hadoop3
+
+$ echo %JAVA_HOME%
+C:\Program Files\Java\jdk-22
+
+echo %HADOOP_HOME%
+C:\hadoop
+```
+
+  * You can then use the following command `pyspark` in your terminal window to start a spark session, navigate to http://localhost:4040 to check the Spark Web UI.<br>
+ ```bash
+$ pyspark
+Python 3.11.0 (main, Oct 24 2022, 18:26:48) [MSC v.1933 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+24/06/10 04:23:32 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Welcome to
+      ____              __
+     / __/__  ___ _____/ /__
+    _\ \/ _ \/ _ `/ __/  '_/
+   /__ / .__/\_,_/_/ /_/\_\   version 3.5.1
+      /_/
+
+Using Python version 3.11.0 (main, Oct 24 2022 18:26:48)
+Spark context Web UI available at http://DESKTOP-RVG77MU.mshome.net:4040
+Spark context available as 'sc' (master = local[*], app id = local-1718007813499).
+SparkSession available as 'spark'.
+>>> 24/06/10 04:23:46 WARN GarbageCollectionMetrics: To enable non-built-in garbage collector(s) List(G1 Concurrent GC), users should configure it(them) to spark.eventLog.gcMetrics.youngGenerationGarbageCollectors or spark.eventLog.gcMetrics.oldGenerationGarbageCollector
+```
   ### Setting up the master and worker nodes using command prompts + running the python file:
   * We can now create a master node:
     * First open a command prompt window and `cd %SPARK_HOME%`.
     * Use the following command: `bin\spark-class2.cmd org.apache.spark.deploy.master.Master`
-    * This will deploy the master node, you can verify this by navigating to localhost:8080 (this web page is important because you will need to extract the URl of the master)<br><br>
-    ![Master](https://github.com/Turnipdo/Spark-Standalone-Cluster-Setup/blob/main/Images/Master%20%2B%20Worker%20images/Master%20Node.png)<br><br>
+    * This will deploy the master node, you can verify this by navigating to localhost:8080 (this web page is important because you will need to extract the URl of the master)<br>
+ ```bash
+$ cd %SPARK_HOME%
+
+$ bin\spark-class2.cmd org.apache.spark.deploy.master.Master
+Using Spark's default log4j profile: org/apache/spark/log4j2-defaults.properties
+24/06/10 04:31:28 INFO Master: Started daemon with process name: 38244@DESKTOP-RVG77MU
+24/06/10 04:31:28 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+24/06/10 04:31:28 INFO SecurityManager: Changing view acls to: ku_ch
+24/06/10 04:31:28 INFO SecurityManager: Changing modify acls to: ku_ch
+24/06/10 04:31:28 INFO SecurityManager: Changing view acls groups to:
+24/06/10 04:31:28 INFO SecurityManager: Changing modify acls groups to:
+24/06/10 04:31:28 INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users with view permissions: ku_ch; groups with view permissions: EMPTY; users with modify permissions: ku_ch; groups with modify permissions: EMPTY
+24/06/10 04:31:28 INFO Utils: Successfully started service 'sparkMaster' on port 7077.
+24/06/10 04:31:28 INFO Master: Starting Spark master at spark://172.19.160.1:7077
+24/06/10 04:31:28 INFO Master: Running Spark version 3.5.1
+24/06/10 04:31:29 INFO JettyUtils: Start Jetty 0.0.0.0:8080 for MasterUI
+24/06/10 04:31:29 INFO Utils: Successfully started service 'MasterUI' on port 8080.
+24/06/10 04:31:29 INFO MasterWebUI: Bound MasterWebUI to 0.0.0.0, and started at http://DESKTOP-RVG77MU.mshome.net:8080
+24/06/10 04:31:29 INFO Master: I have been elected leader! New state: ALIVE
+```
    * Create the first worker node:
      * Open another command prompt window and `cd %SPARK_HOME%`.
      * Use the following command: `bin\spark-class2.cmd org.apache.spark.deploy.worker.Worker -c 1 -m 4G spark://YOUR_IP_ADDRESS:7077`
      * Notice that the `-c 1` indicates I want to assign 1 core to this worker and `-m 4G` which is 4 GB of memory, replace `spark://YOUR_IP_ADDRESS:7077` with the URL you obtained from your spark webpage.
-     * You can now navigate to localhost:8081 to view this worker node.<br><br>
-     ![First Worker](https://github.com/Turnipdo/Spark-Standalone-Cluster-Setup/blob/main/Images/Master%20%2B%20Worker%20images/First%20Worker.png)<br><br>
+     * You can now navigate to localhost:8081 to view this worker node.<br>
+ ```bash
+$ cd %SPARK_HOME%
+
+$ bin\spark-class2.cmd org.apache.spark.deploy.worker.Worker -c 1 -m 4G spark://YOUR_IP_ADDRESS:7077
+0.1:7077
+Using Spark's default log4j profile: org/apache/spark/log4j2-defaults.properties
+24/06/10 04:33:45 INFO Worker: Started daemon with process name: 12924@DESKTOP-RVG77MU
+24/06/10 04:33:46 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+24/06/10 04:33:46 INFO SecurityManager: Changing view acls to: ku_ch
+24/06/10 04:33:46 INFO SecurityManager: Changing modify acls to: ku_ch
+24/06/10 04:33:46 INFO SecurityManager: Changing view acls groups to:
+24/06/10 04:33:46 INFO SecurityManager: Changing modify acls groups to:
+24/06/10 04:33:46 INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users with view permissions: ku_ch; groups with view permissions: EMPTY; users with modify permissions: ku_ch; groups with modify permissions: EMPTY
+24/06/10 04:33:46 INFO Utils: Successfully started service 'sparkWorker' on port 62741.
+24/06/10 04:33:46 INFO Worker: Worker decommissioning not enabled.
+24/06/10 04:33:46 INFO Worker: Starting Spark worker 172.19.160.1:62741 with 1 cores, 4.0 GiB RAM
+24/06/10 04:33:46 INFO Worker: Running Spark version 3.5.1
+24/06/10 04:33:46 INFO Worker: Spark home: C:\spark\spark-3.5.1-bin-hadoop3
+24/06/10 04:33:46 INFO ResourceUtils: ==============================================================
+24/06/10 04:33:46 INFO ResourceUtils: No custom resources configured for spark.worker.
+24/06/10 04:33:46 INFO ResourceUtils: ==============================================================
+24/06/10 04:33:46 INFO JettyUtils: Start Jetty 0.0.0.0:8081 for WorkerUI
+24/06/10 04:33:46 INFO Utils: Successfully started service 'WorkerUI' on port 8081.
+24/06/10 04:33:47 INFO WorkerWebUI: Bound WorkerWebUI to 0.0.0.0, and started at http://DESKTOP-RVG77MU.mshome.net:8081
+24/06/10 04:33:47 INFO Worker: Connecting to master 172.19.160.1:7077...
+24/06/10 04:33:47 INFO TransportClientFactory: Successfully created connection to /172.19.160.1:7077 after 29 ms (0 ms spent in bootstraps)
+24/06/10 04:33:47 INFO Worker: Successfully registered with master spark://172.19.160.1:7077
+```
    * Create the second worker node:
      * Open another command prompt window and `cd %SPARK_HOME%`.
      * Use the following command: `bin\spark-class2.cmd org.apache.spark.deploy.worker.Worker -c 1 -m 4G spark://YOUR_IP_ADDRESS:7077`
      * Again notice I've assigned 1 core to this worker and `-m 4G` which is 4 GB of memory, replace `spark://YOUR_IP_ADDRESS:7077` with the URL you obtained from your spark webpage.
-     * Navigate to localhost:8082 to view the second worker node.<br><br>
-     ![Second Worker](https://github.com/Turnipdo/Spark-Standalone-Cluster-Setup/blob/main/Images/Master%20%2B%20Worker%20images/Second%20Worker.png)<br><br>
+     * Navigate to localhost:8082 to view the second worker node.<br>
+  ```bash
+$ cd %SPARK_HOME%
 
+$ bin\spark-class2.cmd org.apache.spark.deploy.worker.Worker -c 1 -m 4G spark://YOUR_IP_ADDRESS:7077
+0.1:7077
+Using Spark's default log4j profile: org/apache/spark/log4j2-defaults.properties
+24/06/10 04:39:01 INFO Worker: Started daemon with process name: 29608@DESKTOP-RVG77MU
+24/06/10 04:39:01 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+24/06/10 04:39:01 INFO SecurityManager: Changing view acls to: ku_ch
+24/06/10 04:39:01 INFO SecurityManager: Changing modify acls to: ku_ch
+24/06/10 04:39:01 INFO SecurityManager: Changing view acls groups to:
+24/06/10 04:39:01 INFO SecurityManager: Changing modify acls groups to:
+24/06/10 04:39:01 INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users with view permissions: ku_ch; groups with view permissions: EMPTY; users with modify permissions: ku_ch; groups with modify permissions: EMPTY
+24/06/10 04:39:02 INFO Utils: Successfully started service 'sparkWorker' on port 62776.
+24/06/10 04:39:02 INFO Worker: Worker decommissioning not enabled.
+24/06/10 04:39:02 INFO Worker: Starting Spark worker 172.19.160.1:62776 with 1 cores, 4.0 GiB RAM
+24/06/10 04:39:02 INFO Worker: Running Spark version 3.5.1
+24/06/10 04:39:02 INFO Worker: Spark home: C:\spark\spark-3.5.1-bin-hadoop3
+24/06/10 04:39:02 INFO ResourceUtils: ==============================================================
+24/06/10 04:39:02 INFO ResourceUtils: No custom resources configured for spark.worker.
+24/06/10 04:39:02 INFO ResourceUtils: ==============================================================
+24/06/10 04:39:02 INFO JettyUtils: Start Jetty 0.0.0.0:8081 for WorkerUI
+24/06/10 04:39:02 WARN Utils: Service 'WorkerUI' could not bind on port 8081. Attempting port 8082.
+24/06/10 04:39:02 INFO Utils: Successfully started service 'WorkerUI' on port 8082.
+24/06/10 04:39:02 INFO WorkerWebUI: Bound WorkerWebUI to 0.0.0.0, and started at http://DESKTOP-RVG77MU.mshome.net:8082
+24/06/10 04:39:02 INFO Worker: Connecting to master 172.19.160.1:7077...
+24/06/10 04:39:02 INFO TransportClientFactory: Successfully created connection to /172.19.160.1:7077 after 32 ms (0 ms spent in bootstraps)
+24/06/10 04:39:02 INFO Worker: Successfully registered with master spark://172.19.160.1:7077
+```
    * Download the python file and change the paramters accoridngly based on the comments I've provided:
      * Open a new command prompt.
-     * Run the following command `python C:/Users/UserName/Desktop/example_spark.py` or link the relative path to where you've saved your python file.<br><br>
-     ![terminal Output from Python script](https://github.com/Turnipdo/Spark-Standalone-Cluster-Setup/blob/main/Images/Master%20%2B%20Worker%20images/Output%20from%20the%20execution%20of%20python%20script.png)<br><br>
-     ![Spark Web UI master + two workers](https://github.com/Turnipdo/Spark-Standalone-Cluster-Setup/blob/main/Images/Master%20%2B%20Worker%20images/spark%20web%20ui%20with%20two%20workers.png)<br><br>
+     * Run the following command `python C:/Users/UserName/Desktop/example_spark.py` or link the relative path to where you've saved your python file.<br>
+  ```python
+import findspark
+findspark.init('C:\spark\spark-3.5.1-bin-hadoop3')
+
+from pyspark import SparkConf
+from pyspark import SparkContext
+
+conf = SparkConf()
+conf.setMaster('spark://172.19.160.1:7077')
+conf.setAppName('spark-basic')
+sc = SparkContext(conf=conf)
+
+data = [1,2,3,4,5,6,7,8,9,10]
+
+dist_data = sc.parallelize(data, numSlices=2)
+
+result = dist_data.map(lambda x: x*x).collect()
+
+print(result)
+```
+  ```bash
+$ python C:/Users/UserName/Desktop/example_spark.py
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+24/06/10 04:40:40 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+[1, 4, 9, 16, 25, 36, 49, 64, 81, 100]
+
+...
+
+SUCCESS: The process with PID 43040 (child process of PID 36296) has been terminated.
+SUCCESS: The process with PID 36296 (child process of PID 30976) has been terminated.
+SUCCESS: The process with PID 30976 (child process of PID 2108) has been terminated.
+```
+![Spark Web UI master + two workers](https://github.com/Turnipdo/Spark-Standalone-Cluster-Setup/blob/main/Images/Master%20%2B%20Worker%20images/spark%20web%20ui%20with%20two%20workers.png)<br><br>
 
 ## Next Steps + Improvements :electron:
 * In order to improve repeatability, the cluster should be deployed using Docker containerization.
