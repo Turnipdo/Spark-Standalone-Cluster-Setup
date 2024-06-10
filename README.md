@@ -59,6 +59,41 @@ To facilitate the initial setup of Apache Spark, this repository provides a begi
     * `echo %JAVA_HOME%`
     * `echo %HADOOP_HOME%`<br><br>
   * You can then use the following command `pyspark` in your terminal window to start a spark session, navigate to http://localhost:4040 to check the Spark Web UI.
+ 
+  ### Setting up the master and worker nodes using command prompts + running the python file:
+  * We can now create a master node:
+    * First open a command prompt window and `cd %SPARK_HOME%`.
+    * Use the following command: `bin\spark-class2.cmd org.apache.spark.deploy.master.Master`
+    * This will deploy the master node, you can verify this by navigating to localhost:8080 (this web page is important because you will need to extract the URl of the master)<br><br>
+    ![Master](https://github.com/Turnipdo/Spark-Standalone-Cluster-Setup/blob/main/Images/Master%20%2B%20Worker%20images/Master%20Node.png)<br><br>
+   * Create the first worker node:
+     * Open another command prompt window and `cd %SPARK_HOME%`.
+     * Use the following command: `bin\spark-class2.cmd org.apache.spark.deploy.worker.Worker -c 1 -m 4G spark://YOUR_IP_ADDRESS:7077`
+     * Notice that the `-c 1` indicates I want to assign 1 core to this worker and `-m 4G` which is 4 GB of memory, replace `spark://YOUR_IP_ADDRESS:7077` with the URL you obtained from your spark webpage.
+     * You can now navigate to localhost:8081 to view this worker node.<br><br>
+     ![First Worker](https://github.com/Turnipdo/Spark-Standalone-Cluster-Setup/blob/main/Images/Master%20%2B%20Worker%20images/First%20Worker.png)<br><br>
+   * Create the second worker node:
+     * Open another command prompt window and `cd %SPARK_HOME%`.
+     * Use the following command: `bin\spark-class2.cmd org.apache.spark.deploy.worker.Worker -c 1 -m 4G spark://YOUR_IP_ADDRESS:7077`
+     * Again notice I've assigned 1 core to this worker and `-m 4G` which is 4 GB of memory, replace `spark://YOUR_IP_ADDRESS:7077` with the URL you obtained from your spark webpage.
+     * Navigate to localhost:8082 to view the second worker node.<br><br>
+     ![Second Worker](https://github.com/Turnipdo/Spark-Standalone-Cluster-Setup/blob/main/Images/Master%20%2B%20Worker%20images/Second%20Worker.png)<br><br>
+
+   * Download the python file and change the paramters accoridngly based on the comments I've provided:
+     * Open a new command prompt.
+     * Run the following command `python C:/Users/UserName/Desktop/example_spark.py` or link the relative path to where you've saved your python file.<br><br>
+     ![terminal Output from Python script](https://github.com/Turnipdo/Spark-Standalone-Cluster-Setup/blob/main/Images/Master%20%2B%20Worker%20images/Output%20from%20the%20execution%20of%20python%20script.png)<br><br>
+     ![Spark Web UI master + two workers](https://github.com/Turnipdo/Spark-Standalone-Cluster-Setup/blob/main/Images/Master%20%2B%20Worker%20images/spark%20web%20ui%20with%20two%20workers.png)<br><br>
+
+## Next Steps + Improvements :electron:
+* In order to improve repeatability is to deploy this cluster into a Docker container.
+* This will also also ensure that the cluster can be reliably recreated with the same configuration.
+
+
+   
+      
+ 
+  
 
   
   
